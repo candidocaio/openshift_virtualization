@@ -1,0 +1,10 @@
+userData: |-
+  #cloud-config
+  user: centos
+  password: ${CLOUD_USER_PASSWORD}
+  chpasswd: { expire: False }
+  packages:
+  - mariadb-server
+  runcmd:
+  - systemctl enable mariadb
+  - systemctl start mariadb
