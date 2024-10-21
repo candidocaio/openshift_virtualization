@@ -1,0 +1,15 @@
+apiVersion: velero.io/v1
+kind: Restore
+metadata:
+  name: restore-fedora02
+  namespace: openshift-adp
+spec:
+  backupName: backup-fedora02
+  includedResources: []
+  excludedResources:
+  - nodes
+  - events
+  - events.events.k8s.io
+  - backups.velero.io
+  - restores.velero.io
+  restorePVs: true
