@@ -1,18 +1,23 @@
+---
 apiVersion: velero.io/v1
 kind: Backup
 metadata:
   name: backup-fedora02
+  namespace: oadp-{user}
   labels:
     velero.io/storage-location: default
-  namespace: openshift-adp
 spec:
-  hooks: {}
+  defaultVolumesToFsBackup: false
   orLabelSelectors:
   - matchLabels:
       app: fedora02
   - matchLabels:
       vm.kubevirt.io/name: fedora02
-  includedNamespaces:
-  - vmexamples
-  storageLocation: oadp-dpa-1
+  csiSnapshotTimeout: 10m0s
   ttl: 720h0m0s
+  itemOperationTimeout: 4h0m0s
+  storageLocation: oadp-dpa-1
+  hooks: {}
+  includedNamespaces:
+  - vmexamples-{user}
+  snapshotMoveData: false
