@@ -3,7 +3,7 @@ apiVersion: velero.io/v1
 kind: Backup
 metadata:
   name: backup-fedora02
-  namespace: oadp-{user}
+  namespace: oadp-userX
   labels:
     velero.io/storage-location: default
 spec:
@@ -19,5 +19,5 @@ spec:
   storageLocation: oadp-dpa-1
   hooks: {}
   includedNamespaces:
-  - vmexamples-{user}
+  - vmexamples-userX
   snapshotMoveData: false
