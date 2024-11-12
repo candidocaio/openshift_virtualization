@@ -2,7 +2,7 @@
 apiVersion: velero.io/v1
 kind: Backup
 metadata:
-  name: backup-fedora02
+  name: backup-fedora01
   namespace: oadp-userX
   labels:
     velero.io/storage-location: default
@@ -10,9 +10,9 @@ spec:
   defaultVolumesToFsBackup: false
   orLabelSelectors:
   - matchLabels:
-      app: fedora02
+      app: fedora01
   - matchLabels:
-      vm.kubevirt.io/name: fedora02
+      vm.kubevirt.io/name: fedora01
   csiSnapshotTimeout: 10m0s
   ttl: 720h0m0s
   itemOperationTimeout: 4h0m0s
