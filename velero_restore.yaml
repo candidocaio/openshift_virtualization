@@ -3,7 +3,7 @@ apiVersion: velero.io/v1
 kind: Restore
 metadata:
   name: restore-fedora02
-  namespace: oadp-{user}
+  namespace: oadp-userX
 spec:
   backupName: backup-fedora02
   includedResources: []
