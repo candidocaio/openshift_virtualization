@@ -2,10 +2,10 @@ apiVersion: v1
 kind: Service
 metadata:
   name: database
-  namespace: vmexamples
+  namespace: vmexamples-userX
 spec:
   selector:
-    vm.kubevirt.io/name: database
+    vm.kubevirt.io/name: database-userX
   ports:
   - protocol: TCP
     port: 3306
