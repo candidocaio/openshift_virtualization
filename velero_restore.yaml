@@ -2,10 +2,10 @@
 apiVersion: velero.io/v1
 kind: Restore
 metadata:
-  name: restore-fedora02
+  name: restore-fedora01
   namespace: oadp-userX
 spec:
-  backupName: backup-fedora02
+  backupName: backup-fedora01
   includedResources: []
   excludedResources:
   - nodes
