@@ -25,3 +25,17 @@ oc delete vm databasevm
 oc get vmi
 oc get vm
 lab finish accessing-create
+
+lab start accessing-monitor
+oc login -u admin -p redhatocp https://api.ocp4.example.com:6443
+oc get rolebindings -n developers-vms
+oc get rolebindings -n production-vms
+oc get rolebindings -n testing-vms
+oc create rolebinding view --clusterrole=view --user=developer -n developers-vms
+oc get rolebindings view -n developers-vms -o wide
+oc create rolebinding view --clusterrole=view --user=developer -n production-vms
+oc create rolebinding view --clusterrole=view --user=developer -n testing-vms
+oc get rolebindings view -n production-vms -o wide
+oc get rolebindings view -n testing-vms -o wide
+ ./stress-load.sh
+lab finish accessing-monitor
