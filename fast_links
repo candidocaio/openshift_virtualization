@@ -8,3 +8,20 @@ oc login -u admin -p redhatocp https://api.ocp4.example.com:6443
 oc whoami --show-console
 https://console-openshift-console.apps.ocp4.example.com
 http://utility.lab.example.com:8080/openshift4/images/rhel9-mariadb.qcow2
+oc project creating-accessing-vms
+oc get vmi
+virtctl vnc databasevm
+systemctl status mariadb
+oc get pods
+PODNAME=virt-launcher-databasevm-g92gf
+echo $PODNAME
+oc port-forward $PODNAME 33066:3306
+mysql -u devuser -h 127.0.0.1 -P 33066 -p
+use sakila
+oc port-forward $PODNAME 33066:3306
+oc get vmi
+virtctl stop databasevm
+oc delete vm databasevm
+oc get vmi
+oc get vm
+lab finish accessing-create
