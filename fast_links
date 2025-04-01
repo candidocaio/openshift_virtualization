@@ -1,0 +1,10 @@
+https://console-openshift-console.apps.ocp4.example.com
+admin / redhatocp
+lab start virtualization-deploy
+lab finish virtualization-deploy
+
+lab start accessing-create
+oc login -u admin -p redhatocp https://api.ocp4.example.com:6443
+oc whoami --show-console
+https://console-openshift-console.apps.ocp4.example.com
+http://utility.lab.example.com:8080/openshift4/images/rhel9-mariadb.qcow2
