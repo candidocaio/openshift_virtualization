@@ -1,0 +1,109 @@
+# Kubernetes: Folha de Referência de Comandos
+
+## Folha de Referência de Comandos do Kubernetes
+
+### Comandos de cluster Kubernetes
+1. `$ kubectl cluster-info`  
+   # Exibir informações do cluster  
+2. `$ kubectl get nodes -o wide`  
+   # Listar todos os nós do cluster e mostrar IPs  
+
+### Comandos de pods Kubernetes
+3. `$ kubectl get pods`  
+   # Listar todos os pods  
+4. `$ kubectl get pods -o wide`  
+   # Mostrar informações detalhadas sobre os pods  
+5. `$ kubectl get pods -l <label>=<value>`  
+   # Mostrar pods com um rótulo específico  
+6. `$ kubectl get pod <name>`  
+   # Mostrar um pod específico  
+7. `$ kubectl describe pod`  
+   # Mostrar detalhes de um pod  
+8. `$ kubectl logs <pod>`  
+   # Visualizar logs de um pod  
+9. `$ kubectl exec -it <pod>`  
+   # Executar um comando dentro de um pod  
+10. `$ kubectl delete pod <pod>`  
+    # Excluir um pod  
+11. `$ kubectl explain pod <resource>`  
+    # Exibir uma visão geral do recurso Pod  
+
+### Comandos de deployment Kubernetes
+12. `$ kubectl create deployment <name> --image=<image>`  
+    # Criar um deployment  
+13. `$ kubectl get deployments`  
+    # Listar todos os deployments  
+14. `$ kubectl describe deployment <name>`  
+    # Mostrar detalhes de um deployment  
+15. `$ kubectl scale deployment <name> --replicas=<number>`  
+    # Aumentar ou diminuir um deployment  
+16. `$ kubectl rollout restart deployment/<name>`  
+    # Reiniciar um deployment  
+17. `$ kubectl rollout status deployment/<name>`  
+    # Verificar o status de um deployment  
+18. `$ kubectl create deployment <name> --image=<image> -o yaml`  
+    # Criar um deployment e imprimir o YAML  
+19. `$ kubectl create deployment <name> --image=<image> -o yaml --dry-run=client`  
+    # Criar um deployment sem aplicá-lo e imprimir o arquivo YAML  
+20. `$ kubectl create deployment <name> --image=<image> -o yaml --dry-run=client > name.yaml`  
+    # Criar um deployment sem aplicá-lo e salvar o arquivo YAML em "name.yaml"  
+
+### Comandos de service Kubernetes
+21. `$ kubectl get services`  
+    # Listar todos os services  
+22. `$ kubectl describe service <name>`  
+    # Mostrar detalhes de um service  
+23. `$ kubectl expose pod <name>`  
+    # Expor um pod como um service  
+24. `$ kubectl delete service <name>`  
+    # Excluir um service  
+25. `$ kubectl port-forward <pod> <local-port><remote-port>`  
+    # Encaminhar uma porta local para um pod  
+
+### Comandos de configmap e secret Kubernetes
+26. `$ kubectl create configmap <name> --from-literal=<key>=<value>`  
+    # Criar um ConfigMap  
+27. `$ kubectl create secret generic <name> --from-literal=<key>=<value>`  
+    # Criar um Secret  
+28. `$ kubectl get configmaps`  
+    # Listar todos os ConfigMaps  
+29. `$ kubectl get secrets`  
+    # Listar todos os Secrets  
+30. `$ kubectl describe configmap <name>`  
+    # Mostrar detalhes de um ConfigMap  
+
+### Comandos de namespace Kubernetes
+31. `$ kubectl get namespaces`  
+    # Listar todos os namespaces  
+32. `$ kubectl create namespace <name>`  
+    # Criar um namespace  
+33. `$ kubectl delete namespace <name>`  
+    # Excluir um namespace  
+34. `$ kubectl config set-context --current-namespace=<name>`  
+    # Alternar para um namespace diferente  
+
+### Comandos de recursos Kubernetes
+35. `$ kubectl apply -f <file>`  
+    # Aplicar um arquivo de configuração de recurso  
+36. `$ kubectl edit <type> <name>`  
+    # Editar um arquivo de recurso no terminal  
+37. `$ kubectl delete -f <file>`  
+    # Excluir um recurso a partir de um arquivo de configuração  
+38. `$ kubectl get <type>`  
+    # Listar recursos de um tipo específico  
+39. `$ kubectl describe <type> <name>`  
+    # Mostrar detalhes sobre um recurso específico  
+
+### Comandos de estatísticas e eventos Kubernetes
+40. `$ kubectl top nodes`  
+    # Exibir uso de recursos dos nós  
+41. `$ kubectl top pods`  
+    # Exibir uso de recursos dos pods  
+42. `$ kubectl events`  
+    # Mostrar eventos recentes do cluster  
+43. `$ kubectl get events`  
+    # Listar todos os eventos do cluster  
+
+### Comandos de permissões Kubernetes
+44. `$ kubectl get roles`  
+    # Listar todas as roles
