@@ -1,1 +1,105 @@
 sum(rate(kubevirt_vmi_cpu_usage_seconds_total{name='winweb02',namespace='webapp-vms'}[5m])) BY (name, namespace)
+
+sum(
+  rate(
+    kubevirt_vmi_cpu_usage_seconds_total{
+      name="winweb02",
+      namespace="webapp-vms"
+    }[5m]
+  )
+) BY (name, namespace)
+
+1. A métrica: kubevirt_vmi_cpu_usage_seconds_total
+O que é: é uma métrica do KubeVirt que representa o total de segundos de CPU consumidos pela VMI (VM Instance), acumulado ao longo do tempo (um counter). 
+1
+Labels importantes:
+name: nome da VMI/VM (no seu caso, winweb02)
+namespace: namespace Kubernetes onde a VMI está (webapp-vms)
+Pode ter outros labels como node, domain, id (vCPU), etc.
+Como é um counter, o valor só aumenta (ou zera se o processo reiniciar). Para transformar isso em “CPU por segundo”, usamos rate().
+
+2. O filtro {name="winweb02", namespace="webapp-vms"}
+kubevirt_vmi_cpu_usage_seconds_total{
+  name="winweb02",
+  namespace="webapp-vms"
+}
+promql
+
+Isso faz com que somente as séries dessa VM nesse namespace sejam consideradas:
+
+Ignora qualquer outra VM (outros name)
+Ignora VMs de outros namespaces
+Se houver múltiplas séries (por exemplo, uma por vCPU, ou por node, dependendo de como o KubeVirt está expondo a métrica), todas elas serão pegas aqui.
+
+3. O range vector [5m]
+kubevirt_vmi_cpu_usage_seconds_total{...}[5m]
+promql
+
+[5m] diz: pega os valores dos últimos 5 minutos para cada série.
+Em vez de um único valor “instantâneo”, isso vira um conjunto de amostras ao longo desses 5 minutos (um range vector).
+Esse range é o que o rate() precisa para calcular a velocidade de aumento do counter.
+4. A função rate(...[5m])
+rate(kubevirt_vmi_cpu_usage_seconds_total{...}[5m])
+promql
+
+rate() calcula a taxa média de crescimento por segundo do counter nesses 5 minutos.
+Interpretação prática:
+Se o resultado for 0.5, significa que, em média, a VM consumiu 0,5 segundos de CPU por segundo ao longo dos últimos 5 minutos.
+Isso equivale a 50% de uso de 1 CPU (1 core), se estivermos olhando uma única vCPU.
+Se existirem múltiplas séries (ex.: uma por vCPU), o rate() é aplicado separadamente em cada série, ainda sem somar nada.
+5. O sum(...) BY (name, namespace)
+sum(
+  rate(kubevirt_vmi_cpu_usage_seconds_total{...}[5m])
+) BY (name, namespace)
+promql
+
+sum BY (name, namespace) pega todas as séries que saíram do rate() e soma, mantendo apenas os labels name e namespace.
+Por quê isso é importante?
+
+Se sua VM tiver várias vCPUs, é provável que exista uma série por vCPU.
+Então:
+rate(...) dá o uso de CPU por vCPU.
+sum BY (name, namespace) soma todas as vCPUs para te dar o uso total da VM.
+Exemplo mental:
+
+VM com 2 vCPUs:
+vCPU 0: rate(...) = 0.7  (70% de 1 core)
+vCPU 1: rate(...) = 0.5  (50% de 1 core)
+sum BY (name, namespace):
+0.7 + 0.5 = 1.2 → VM usando 1,2 cores em média.
+6. Como interpretar o valor final
+O resultado final é uma série do tipo:
+
+{name="winweb02", namespace="webapp-vms"}  0.85
+text
+
+O valor numérico é em “segundos de CPU por segundo” (s/s), que na prática você pode ler como:
+“quantos cores, em média, a VM está usando”.
+Exemplos de leitura:
+0.25 → ~25% de 1 vCPU
+1 → ~100% de 1 vCPU
+2 → ~100% de 2 vCPUs, ou 50% de 4 vCPUs, etc.
+Se quiser transformar isso em percentual de uso em relação ao total de vCPUs, você precisaria saber quantas vCPUs a VM tem (por exemplo, via outra métrica ou label) e fazer algo como:
+
+100 * sum(rate(kubevirt_vmi_cpu_usage_seconds_total{name="winweb02",namespace="webapp-vms"}[5m])) BY (name, namespace)
+/ <NUM_VCPUS>
+promql
+
+Substituindo <NUM_VCPUS> pelo número de CPUs da VM (por exemplo, 4).
+
+7. Dicas práticas
+Para ver por vCPU, sem somar tudo:
+
+rate(kubevirt_vmi_cpu_usage_seconds_total{name="winweb02",namespace="webapp-vms"}[5m])
+promql
+
+Para ver todas as VMs do namespace:
+
+sum(rate(kubevirt_vmi_cpu_usage_seconds_total{namespace="webapp-vms"}[5m])) BY (name, namespace)
+promql
+
+Para ver o top 5 VMs que mais usam CPU:
+
+topk(5,
+  sum(rate(kubevirt_vmi_cpu_usage_seconds_total[5m])) BY (name, namespace)
+)
