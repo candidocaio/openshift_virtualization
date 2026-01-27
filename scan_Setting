@@ -1,0 +1,13 @@
+kind: ScanSettingBinding
+apiVersion: compliance.openshift.io/v1alpha1
+metadata:
+  name: fedramp01
+  namespace: openshift-compliance
+profiles:
+  - apiGroup: compliance.openshift.io/v1alpha1
+    kind: Profile
+    name: rhcos4-moderate
+settingsRef:
+  apiGroup: compliance.openshift.io/v1alpha1
+  kind: ScanSetting
+  name: scan01
