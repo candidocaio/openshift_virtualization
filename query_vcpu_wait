@@ -1,1 +1,101 @@
 sum(rate(kubevirt_vmi_vcpu_wait_seconds_total{name='winweb01',namespace='webapp-vms'}[5m])) BY (name, namespace)
+
+sum(
+  rate(
+    kubevirt_vmi_vcpu_wait_seconds_total{
+      name="winweb01",
+      namespace="webapp-vms"
+    }[5m]
+  )
+) BY (name, namespace)
+
+1. A métrica: kubevirt_vmi_vcpu_wait_seconds_total
+Significado: total acumulado de segundos em que a vCPU da VM ficou “esperando” (em fila), sem conseguir executar, normalmente porque não tinha CPU física disponível no host.
+É um counter:
+Só aumenta com o tempo (ou zera em restart).
+Representa “quanto tempo a vCPU passou esperando”, não executando.
+Em termos simples: quanto mais alto esse valor (ou sua taxa), mais a VM está sofrendo com CPU “congestionada” no host.
+
+2. Filtro por VM e namespace
+{name="winweb01", namespace="webapp-vms"}
+promql
+
+Restringe a métrica à VM winweb01 no namespace webapp-vms.
+Se essa VM tiver múltiplas vCPUs, normalmente haverá uma série por vCPU (por exemplo com um label id da CPU).
+3. Range [5m] e rate(...)
+rate(kubevirt_vmi_vcpu_wait_seconds_total{...}[5m])
+promql
+
+[5m]: pega as amostras dos últimos 5 minutos.
+rate(...) calcula a taxa média de crescimento por segundo do counter nesse período.
+Interpretação:
+
+Se o resultado for 0.3, significa que em média, a vCPU ficou 0,3 segundos “esperando” para cada 1 segundo de tempo real, nos últimos 5 minutos.
+Isso é exatamente o “queue time” da vCPU:
+0 → praticamente sem fila.
+0.3 → 30% do tempo a vCPU ficou em fila.
+1 → a vCPU passou tanto tempo esperando quanto o tempo real (gravíssimo).
+Essa taxa é por série, ou seja, por vCPU, antes do sum.
+
+4. sum(...) BY (name, namespace)
+sum(
+  rate(kubevirt_vmi_vcpu_wait_seconds_total{...}[5m])
+) BY (name, namespace)
+promql
+
+Soma a taxa de espera de todas as vCPUs da VM winweb01.
+Agrupa o resultado final por name e namespace (você passa a ter um valor único por VM).
+Exemplo mental:
+
+VM com 2 vCPUs:
+vCPU 0: rate(...) = 0.2 (20% do tempo esperando)
+vCPU 1: rate(...) = 0.4 (40% do tempo esperando)
+sum BY (name, namespace):
+0.2 + 0.4 = 0.6 → soma das esperas em todas as vCPUs.
+Esse número é “segundos de espera por segundo, somados em todas as vCPUs”.
+
+5. Como interpretar na prática
+O resultado final será algo como:
+
+{name="winweb01", namespace="webapp-vms"}  0.15
+text
+
+Isso significa:
+
+Em média, 0,15 segundos de espera para CPU a cada 1 segundo de tempo real, somando todas as vCPUs.
+Interpretação intuitiva:
+Até algo como 0.05–0.1 → fila pequena, geralmente aceitável.
+Acima de 0.2–0.3 → a VM começa a sofrer: threads esperando CPU, resposta mais lenta.
+Valores maiores ainda (0.5, 1.0, etc.) → host super lotado, VM não consegue CPU quando precisa.
+6. Transformando em “percentual de espera”
+Se você quiser enxergar isso como percentual de tempo em fila (melhor para dashboard), pode multiplicar por 100:
+
+100 *
+sum(
+  rate(kubevirt_vmi_vcpu_wait_seconds_total{name="winweb01",namespace="webapp-vms"}[5m])
+) BY (name, namespace)
+promql
+
+Isso vai te dar um valor que você pode ler como:
+
+10 → ~10% do tempo total das vCPUs em fila.
+30 → ~30% em fila.
+7. Uso prático com alertas
+Uma forma comum de usar essa métrica é criar um alerta, por exemplo:
+
+sum(rate(kubevirt_vmi_vcpu_wait_seconds_total[5m])) BY (name, namespace) > 0.2
+promql
+
+ou em percentual:
+
+100 * sum(rate(kubevirt_vmi_vcpu_wait_seconds_total[5m])) BY (name, namespace) > 20
+promql
+
+Isso pode indicar:
+
+Overcommit de CPU no nó físico.
+Muitas VMs competindo por CPU ao mesmo tempo.
+Necessidade de:
+Migrar VMs para outro nó.
+Aumentar CPU das VMs mais críticas.
+Ajustar limites/requests de CPU.
