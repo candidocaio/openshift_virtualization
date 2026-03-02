@@ -1,0 +1,395 @@
+Conceitos de Virtualização
+
+A virtualização de sistemas permite que um único computador seja dividido
+em vários computadores virtuais que funcionam simultaneamente, onde cada
+um executa seu próprio sistema operacional.
+
+Essas máquinas virtuais (VMs) são isoladas umas das outras, como se
+estivessem rodando em hardware dedicado. As máquinas virtuais possuem
+suas próprias interfaces de rede, endereços IP, sistemas de arquivos e
+outros dispositivos. Cada máquina virtual pode executar qualquer sistema
+operacional ou versão compatível.
+
+A virtualização permite o uso eficiente dos recursos físicos de
+computação. Um sistema de grande porte pode ser particionado em vários
+sistemas virtuais, aproveitando totalmente sua capacidade. A
+virtualização também possibilita a rápida criação (provisionamento) de
+novos servidores virtuais, o que é mais ágil do que implantar novo
+hardware físico.
+
+O componente chamado hipervisor gerencia e viabiliza a virtualização do
+servidor físico. Esse hipervisor executa as máquinas virtuais para cada
+sistema operacional virtualizado. Ele fornece acesso a CPUs virtuais,
+memória, discos, rede e outros dispositivos, além de impedir que as
+máquinas virtuais tenham acesso direto ao hardware físico ou a outras
+máquinas virtuais.
+A máquina física e o sistema operacional que fornecem o hipervisor são
+chamados de host (anfitrião). Já o guest (convidado) é o sistema
+operacional que roda dentro de uma máquina virtual no hipervisor.
+
+Uma solução de gerenciamento de virtualização administra de forma
+eficiente as máquinas virtuais e os hosts que fazem parte da sua
+infraestrutura. Normalmente, as ferramentas de gerenciamento criam um
+ambiente integrado de virtualização para criar, gerenciar e monitorar
+máquinas virtuais, hipervisores, armazenamento e recursos de rede.
+
+Um gerenciador de virtualização oferece controle centralizado da
+infraestrutura, evitando a necessidade de administrar individualmente
+centenas de hipervisores e suas respectivas máquinas virtuais.
+
+Virtualização versus Computação em Nuvem
+
+A virtualização fornece a base para a computação em nuvem. A computação
+em nuvem utiliza a tecnologia de virtualização para oferecer recursos
+de computação compartilhados como serviços de Infraestrutura como
+Serviço (IaaS), sob demanda, por meio da rede.
+
+Um ambiente de virtualização gerenciado é diferente de uma nuvem
+pública ou privada. Tanto a virtualização gerenciada quanto a
+computação em nuvem permitem administrar recursos físicos como
+múltiplos recursos virtuais.
+
+A computação em nuvem compartilha um conjunto de recursos alocados
+automaticamente como um serviço. Os recursos em nuvem estão disponíveis
+por meio de um modelo de autoatendimento e também podem oferecer os
+benefícios de gerenciamento automatizado, escalabilidade e
+elasticidade, enquanto os ambientes de virtualização oferecem
+gerenciamento de data center privado de nível empresarial.
+
+A virtualização gerenciada e a computação em nuvem são mais adequadas
+para diferentes casos de uso. Um dos principais fatores para escolher
+virtualização em vez de nuvem é a carga de trabalho esperada.
+
+A virtualização geralmente é a melhor plataforma em comparação com a
+computação em nuvem para cargas de trabalho que exigem recursos finitos
+para uma aplicação específica, disponível para um conjunto definido de
+usuários.
+
+Máquinas Virtuais versus Contêineres
+
+Um contêiner é um processo que executa uma aplicação de forma
+independente de outros contêineres no host. De modo geral, os
+contêineres desempenham um papel semelhante ao das máquinas virtuais,
+onde uma aplicação reside em um ambiente autocontido com rede
+virtualizada para comunicação.
+
+Embora, à primeira vista, ambos os casos de uso pareçam iguais, os
+contêineres têm uma estrutura mais leve (menor consumo de recursos) e
+iniciam e encerram mais rapidamente do que uma máquina virtual.
+
+Em termos de uso de memória e disco, os contêineres geralmente são
+medidos em megabytes, enquanto as máquinas virtuais (VMs) são medidas
+em gigabytes.
+
+Os contêineres são criados a partir de uma imagem de contêiner, que
+inclui todas as dependências de execução da aplicação.
+
+Depois disso, os contêineres podem ser executados em qualquer host, sem
+exigir a instalação de dependências no host e sem conflitos entre as
+dependências de diferentes contêineres.
+
+Os contêineres utilizam recursos do kernel do Linux, como namespaces e
+control groups (cgroups). Por exemplo, os contêineres usam cgroups para
+gerenciamento de recursos, como a alocação de tempo de CPU e memória do
+sistema. Os namespaces isolam os processos e recursos de um contêiner
+dos demais contêineres e do sistema host.
+
+Os contêineres são preferidos para microsserviços com desenvolvimento
+rápido e necessidades individuais de escalabilidade. Uma máquina
+virtual (VM) é útil quando uma organização não deseja dedicar recursos
+para converter aplicações legadas ou complexas em contêineres.
+
+Uma VM também é necessária quando é preciso um ambiente completo de
+computação adicional, como nos casos em que uma aplicação exige
+hardware específico e dedicado. Além disso, uma VM é preferível quando
+a aplicação requer um sistema operacional diferente de Linux ou um
+kernel diferente do host.
+
+Introdução ao OpenShift Virtualization
+
+Assim como outros produtos de virtualização da Red Hat, o OpenShift
+Virtualization utiliza a tecnologia Kernel-based Virtual Machine (KVM)
+como hipervisor e as bibliotecas libvirt para definir as máquinas
+virtuais.
+
+O KVM e o libvirt são executados em um contêiner que pode ser
+implantado nas plataformas Kubernetes e OpenShift juntamente com
+aplicações conteinerizadas. O agente convidado Quick EMUlator (QEMU)
+transmite informações sobre a VM para o host.
+
+O Red Hat OpenShift é um conjunto de componentes e serviços modulares
+construídos sobre a infraestrutura de contêineres do Kubernetes. O
+produto de software Red Hat OpenShift é derivado do projeto open
+source Kubernetes.
+
+Embora o Red Hat OpenShift e o Kubernetes sejam softwares de
+orquestração de contêineres, o Red Hat OpenShift é distribuído como uma
+plataforma corporativa open source derivada (downstream).
+
+O operador OpenShift Virtualization oferece recursos de virtualização
+de nível empresarial, como migração ao vivo (live migration), alta
+disponibilidade, agendamento de sistemas, gerenciamento de energia,
+gerenciamento de imagens, snapshots, provisionamento fino (thin
+provisioning) e monitoramento.
+
+O Red Hat OpenShift, com o operador de Virtualização instalado,
+gerencia tanto contêineres quanto máquinas virtuais a partir de uma
+interface compartilhada.
+
+Red Hat OpenShift Virtualization
+
+O Red Hat OpenShift Virtualization é um operador Kubernetes no
+Red Hat OpenShift e é baseado no complemento de virtualização
+KubeVirt para Kubernetes.
+
+O KubeVirt oferece virtualização nativa para contêineres ao
+utilizar o hipervisor KVM do kernel Linux dentro de um
+contêiner Kubernetes.
+
+O KubeVirt inclui serviços semelhantes aos das plataformas
+tradicionais de virtualização, combinando o melhor das
+tecnologias maduras de gerenciamento de virtualização com a
+orquestração de contêineres do Kubernetes.
+
+Iniciado pela Red Hat, o KubeVirt atualmente é um projeto em
+fase de incubação da Cloud Native Computing Foundation (CNCF)
+e um projeto open source upstream.
+
+Virtualização Encontra a Conteinerização
+
+Este curso explora os recursos do OpenShift Virtualization que
+fornecem a camada de gerenciamento e orquestração para cargas
+de trabalho de máquinas virtuais dentro de um cluster
+Red Hat OpenShift.
+
+Com o OpenShift Virtualization, é possível oferecer resiliência
+e facilidade no gerenciamento de aplicações baseadas em VMs e
+aplicações conteinerizadas a partir de uma única interface e
+infraestrutura.
+
+Essa capacidade elimina a necessidade de uma solução separada
+e potencialmente cara de gerenciamento de virtualização e
+cria uma oportunidade valiosa para empresas que estão
+adotando contêineres, mas ainda mantêm implantações
+tradicionais de máquinas virtuais.
+
+Benefícios do OpenShift Virtualization
+
+Adicionar o OpenShift Virtualization a um cluster
+Red Hat OpenShift permite implantar e gerenciar cargas
+de trabalho virtualizadas utilizando o mesmo hardware,
+ambiente e conjunto de ferramentas usados pelas
+aplicações conteinerizadas.
+
+Gerenciar máquinas virtuais juntamente com implantações
+conteinerizadas em um único cluster proporciona
+vantagens administrativas e econômicas.
+
+O uso do OpenShift Virtualization unifica as interfaces
+de gerenciamento utilizadas pelos administradores de
+sistemas, melhorando a confiabilidade das aplicações
+e reduzindo a sobrecarga operacional.
+
+Os seguintes operadores e componentes são integrados
+ao operador OpenShift Virtualization:
+
+OpenShift Virtualization Operator
+
+O OpenShift Virtualization é uma tecnologia open source
+que permite executar VMs no Red Hat OpenShift por meio
+do operador OpenShift Virtualization.
+
+Ele é baseado no projeto upstream KubeVirt e executa
+e gerencia máquinas virtuais tradicionais como se
+fossem contêineres.
+
+HyperConverged Operator (HCO)
+
+O HCO implanta e gerencia componentes de virtualização
+e operadores complementares, como o Containerized
+Data Importer (CDI), para o OpenShift Virtualization.
+
+Hostpath Provisioner Operator (HPP)
+
+O operador HPP é um provisionador de armazenamento
+local para máquinas virtuais.
+
+Armazenamento local ou volumes montados nos nós
+podem ser provisionados para Instâncias de
+Máquinas Virtuais (VMIs).
+
+Cluster Network Addons Operator (CNAO)
+
+O operador CNA implanta componentes adicionais
+de rede, como o Multus e o plug-in CNI Linux bridge,
+para conectar VMs a redes adicionais.
+
+Scheduling, Scale, and Performance Operator (SSP)
+
+O operador SSP implanta componentes para
+agendamento, escalabilidade e desempenho de VMs,
+como templates de VM, coletores de métricas
+e plug-ins de descoberta de recursos dos nós.
+
+QEMU agent
+
+O agente convidado Quick EMUlator (QEMU) é um
+daemon que é executado dentro da VM e transmite
+informações ao host sobre a VM, usuários,
+sistemas de arquivos e redes secundárias.
+
+Kernel-based Virtual Machine (KVM)
+
+O KVM é uma tecnologia de virtualização open source
+incorporada ao kernel Linux que permite que uma
+máquina host execute múltiplos ambientes virtuais
+isolados, conhecidos como VMs convidadas.
+
+Containerized Data Importer (CDI)
+
+Um componente upstream do Kubernetes que fornece
+uma camada de gerenciamento independente de hardware
+para volumes de armazenamento que são anexados
+a instâncias implantadas.
+
+Consoles de máquinas virtuais
+
+Conecte-se às VMs utilizando ferramentas de
+linha de comando, o console web e protocolos
+comuns, como o Remote Desktop Protocol (RDP)
+para VMs Windows e SSH.
+
+VMIs independentes (Stand-alone VMIs)
+
+Use a linha de comando e o console web para
+gerenciar VMIs independentes que foram criadas
+fora do cluster OpenShift, como VMIs criadas
+por meio de scripts, automação ou outros
+métodos de linha de comando.
+
+Mapeamento de Recursos do OpenShift Virtualization
+
+Para comparação com outros hipervisores, como
+VMware vSphere ou Red Hat Virtualization,
+a tabela a seguir lista os componentes e
+conceitos do OpenShift Virtualization que
+correspondem às funções de outros hipervisores.
+
+Armazenamento de discos de VM
+
+Função: Armazenar discos de máquinas virtuais
+
+VMware vSphere: Datastore
+RHV: Storage domain
+Hyper-V: Storage pool and storage spaces
+OpenShift: Persistent volume (PV) e Persistent volume claim (PVC)
+Descrição: Stores VM disks
+
+---
+
+Balanceamento de recursos entre nós
+
+Função: Balanceamento de recursos entre nós do cluster
+
+VMware vSphere: Dynamic Resource Scheduling (DRS)
+RHV: Load balancing policy
+Hyper-V: Hyper-V load balancing
+OpenShift: Pod eviction and descheduler
+Descrição: Resource balancing across nodes
+
+---
+
+Rede definida por software (SDN)
+
+Função: Virtualização e gerenciamento avançado de rede
+
+VMware vSphere: NSX
+RHV: RHV OVN
+Hyper-V: Hyper-V network virtualization
+OpenShift: OVN-Kubernetes e Multus
+Descrição: Software-defined networking
+
+---
+
+Gerenciamento de armazenamento baseado em política
+
+Função: Definição de políticas para tipos de armazenamento
+
+VMware vSphere: Storage Policy Based Management (SPBM)
+RHV: Storage domain type
+Hyper-V: Tiered storage spaces
+OpenShift: Storage class
+Descrição: Policy-based storage management
+
+---
+
+Monitoramento e métricas
+
+Função: Coleta e visualização de métricas de nós e VMs
+
+VMware vSphere: vCenter vRealize Operations / Aria Operations
+RHV: Grafana dashboard
+Hyper-V: System Center Virtual Machine Manager (SCVMM)
+OpenShift: OpenShift metrics and monitoring
+Descrição: Node and VM metrics collection
+
+---
+
+Migração ao vivo de VM
+
+Função: Mover VM entre nós sem interrupção
+
+VMware vSphere: vMotion
+RHV: Live migration
+Hyper-V: Live migration
+OpenShift: Live migration
+Descrição: Moves VM to another node without interruption
+
+---
+
+Migração de armazenamento sem interrupção
+
+Função: Migrar armazenamento da VM sem downtime
+
+VMware vSphere: Storage vMotion
+RHV: Live storage migration
+Hyper-V: Storage live migration
+OpenShift: Storage class migration
+Descrição: Nondisruptive VM storage migration
+
+---
+
+Configuração e gerenciamento de rede do host
+
+Função: Gerenciar switches virtuais e configuração de rede do host
+
+VMware vSphere: vSwitch / DvSwitch
+RHV: NMState
+Hyper-V: Hyper-V virtual switch
+OpenShift: NMState operator and Multus
+Descrição: Host network configuration and management
+
+---
+
+Serviços do sistema operacional convidado
+
+Função: Integração entre VM e host
+
+VMware vSphere: VMware tools
+RHV: QEMU agent
+Hyper-V: Hyper-V integration services
+OpenShift: QEMU agent
+Descrição: Guest operating system service
+
+References
+For more information, refer to the OpenShift Virtualization documentation at 
+https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html-single/virtualization/index
+
+The upstream KubeVirt project is hosted at https://kubevirt.io
+
+For more information about how OpenShift Virtualization compares to VMware vSphere, 
+refer to the About OpenShift Virtualization chapter in the Red Hat OpenShift Virtualization documentation at 
+https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html-single/virtualization/index#virt-vmware-comparison_about-virt
+
+For more information, refer to the OpenShift Virtualization - Reference Implementation Guide article at https://access.redhat.com/articles/7067871
+
